@@ -27,9 +27,9 @@ namespace RocksDbSharpTest
 
             var options = new DbOptions();
             var rocksDbException = Assert.Throws<RocksDbException>(() => RocksDb.Open(options, path));
-            Assert.Equal(
-                $"Invalid argument: {path}: does not exist (create_if_missing is false)",
-                rocksDbException.Message);
+            Assert.StartsWith("Invalid argument:", rocksDbException.Message);
+            Assert.EndsWith("does not exist (create_if_missing is false)", rocksDbException.Message);
+            Assert.Contains(path, rocksDbException.Message);
 
             options = new DbOptions()
                 .SetCreateIfMissing(true)
